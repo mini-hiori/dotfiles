@@ -1,6 +1,5 @@
 alefragnani.project-manager
 anthropic.claude-code
-azemoh.one-monokai
 github.vscode-github-actions
 github.vscode-pull-request-github
 golang.go
@@ -9,7 +8,6 @@ hediet.vscode-drawio
 ibm.output-colorizer
 mechatroner.rainbow-csv
 mhutchie.git-graph
-monokai.theme-monokai-pro-vscode
 ms-azuretools.vscode-containers
 ms-azuretools.vscode-docker
 ms-ceintl.vscode-language-pack-ja
@@ -17,7 +15,6 @@ ms-vscode.makefile-tools
 oderwat.indent-rainbow
 pkief.material-icon-theme
 rebornix.ruby
-saikou9901.evilinspector
 shardulm94.trailing-spaces
 sorbet.sorbet-vscode-extension
 streetsidesoftware.code-spell-checker
