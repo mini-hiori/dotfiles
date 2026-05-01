@@ -1,0 +1,32 @@
+# フォント
+font-family = HackGen35 Console NF
+
+theme = Monokai Pro
+background-opacity = 0.9
+background-blur-radius = 20
+window-save-state = always
+
+# タブバー表示
+window-theme = ghostty
+
+# シェル統合（作業ディレクトリ引き継ぎ等）
+shell-integration = detect
+
+# ウィンドウ装飾
+window-padding-x = 8
+window-padding-y = 8
+window-decoration = auto
+
+# カーソル
+cursor-style = bar
+cursor-style-blink = true
+
+# フォントサイズ
+font-size = 13
+
+# 新しいタブ/分割で同じディレクトリを引き継ぐ
+window-inherit-working-directory = true
+
+# Emacs風カーソル移動キーをレガシーコードで送信 (CSI u非対応アプリ向け)
+keybind = ctrl+a=text:\x01
+keybind = ctrl+e=text:\x05

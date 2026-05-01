@@ -1,0 +1,11 @@
+{
+    "window.commandCenter": true,
+    "workbench.activityBar.orientation": "vertical",
+    "workbench.colorTheme": "One Monokai",
+    "workbench.iconTheme": "material-icon-theme",
+    "files.insertFinalNewline": true,
+    "claude.confirmEdits": false,
+    "extensions.ignoreRecommendations": true,
+    "claudeCode.preferredLocation": "panel",
+    "git.openRepositoryInParentFolders": "never"
+}
