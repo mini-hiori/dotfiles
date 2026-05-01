@@ -7,7 +7,7 @@
 | ツール | パス |
 |--------|------|
 | [Ghostty](https://ghostty.org/) | [`ghostty/config`](./ghostty/config) |
-| [Cursor](https://www.cursor.com/) | [`cursor/`](./cursor) (`settings.json`, `keybindings.json`) |
+| [Cursor](https://www.cursor.com/) | [`cursor/`](./cursor) (`settings.json`, `keybindings.json`, `extensions.txt`) |
 | 業務改善スクリプト | [`scripts/`](./scripts) (`aws-sso-login.sh` ほか) |
 | zsh 設定スニペット (PATH / エイリアス) | [`zsh/zshrc.dotfiles.zsh`](./zsh/zshrc.dotfiles.zsh) |
 
@@ -22,6 +22,7 @@
 実行内容:
 
 - Ghostty / Cursor の設定ファイルを `~/Library/Application Support/...` 配下に **symlink で配置**
+- `cursor/extensions.txt` の **拡張機能を `cursor --install-extension` で順次 install** (未導入のみ、`cursor` CLI 不在時は skip)
 - `~/.zshrc` の末尾に `source "<dotfiles>/zsh/zshrc.dotfiles.zsh"` を **1 行追記** (既存 zshrc を破壊しない追記型。重複検出済み)
 - `scripts/aws-sso-config.local.sh` を `.example` から **テンプレートコピー** (要編集、後述)
 
@@ -78,5 +79,8 @@ ghostty +show-config --default --docs
 - **キーバインド**:
   - `Cmd + I` → Composer の Agent モード起動
   - `Shift + Enter` (ターミナル focus 時) → `\<改行>` を送出して shell で複数行入力を継続
+- **拡張機能** ([`cursor/extensions.txt`](./cursor/extensions.txt)): One Monokai (テーマ) / material-icon-theme / GitHub Actions・PR / Go / Terraform / Docker / drawio / Git Graph / Project Manager 等 25 件 (詳細はファイル参照)
 
-> **note**: `install.sh` が配置する symlink 経由のため、Cursor の GUI で設定変更すると symlink を辿ってリポジトリ側の `cursor/settings.json` / `cursor/keybindings.json` が直接書き換わる。手元で変更したい場合は通常通り設定 UI から触ってよい (リポジトリ側に反映されるので、その後 commit する運用)。
+> **note 1**: `install.sh` が配置する symlink 経由のため、Cursor の GUI で設定変更すると symlink を辿ってリポジトリ側の `cursor/settings.json` / `cursor/keybindings.json` が直接書き換わる。手元で変更したい場合は通常通り設定 UI から触ってよい (リポジトリ側に反映されるので、その後 commit する運用)。
+>
+> **note 2**: 拡張機能は **一方向同期** (extensions.txt → 実機)。GUI で拡張機能を追加・削除した後はエイリアス `cursor-ext-export` (詳細は [scripts/README.md](./scripts/README.md)) で extensions.txt を実機状態に上書きしてから commit する。

@@ -63,6 +63,40 @@ ensure_zshrc_source_line() {
   log "source 行を追記: $zshrc"
 }
 
+ensure_cursor_extensions() {
+  local list_file="$SCRIPT_DIR/cursor/extensions.txt"
+
+  if [[ ! -f "$list_file" ]]; then
+    log "extensions.txt が無いため skip: $list_file"
+    return 0
+  fi
+
+  if ! command -v cursor >/dev/null 2>&1; then
+    log "cursor CLI が PATH に無いため skip"
+    log "Cursor で Cmd+Shift+P → 'Shell Command: Install cursor command in PATH' を実行後に install.sh 再実行で適用される"
+    return 0
+  fi
+
+  local installed
+  installed="$(cursor --list-extensions 2>/dev/null || true)"
+
+  local total=0 newly=0
+  while IFS= read -r ext || [[ -n "$ext" ]]; do
+    [[ -z "$ext" || "$ext" == "#"* ]] && continue
+    total=$((total + 1))
+    if echo "$installed" | grep -qx "$ext"; then
+      continue  # 既に install 済み (skip)
+    fi
+    log "install: $ext"
+    if ! cursor --install-extension "$ext" >/dev/null 2>&1; then
+      log "  ⚠️ install 失敗: $ext"
+    fi
+    newly=$((newly + 1))
+  done < "$list_file"
+
+  log "拡張機能 ${total} 件中 新規 install: ${newly} 件 (残りは既存スキップ)"
+}
+
 ensure_aws_sso_local_config() {
   local example="$SCRIPT_DIR/scripts/aws-sso-config.local.sh.example"
   local local_file="$SCRIPT_DIR/scripts/aws-sso-config.local.sh"
@@ -90,6 +124,9 @@ main() {
   ensure_symlink \
     "$SCRIPT_DIR/cursor/keybindings.json" \
     "$HOME/Library/Application Support/Cursor/User/keybindings.json"
+
+  section "Cursor 拡張機能"
+  ensure_cursor_extensions
 
   section "zsh (~/.zshrc に source 行を追記)"
   ensure_zshrc_source_line

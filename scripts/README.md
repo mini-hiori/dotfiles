@@ -33,3 +33,26 @@ awssso
 ```
 
 番号でアカウントを選ぶと、対応する AWS CLI プロファイルが (なければ) 作成され、SSO ログイン後に `AWS_PROFILE` が現在のシェルに export される。
+
+## cursor-extensions-export.sh
+
+実機にインストール済みの Cursor 拡張機能リストを `cursor/extensions.txt` に書き出す。`install.sh` は逆方向 (extensions.txt → 実機) のため、本スクリプトは **GUI で追加・削除した分を dotfiles 側に反映** するためのもの。
+
+### エイリアス
+
+`zsh/zshrc.dotfiles.zsh` で自動設定:
+
+```sh
+alias cursor-ext-export='cursor-extensions-export.sh'
+```
+
+### 想定ワークフロー
+
+1. Cursor GUI で拡張機能を追加・削除
+2. `cursor-ext-export` を実行 → `cursor/extensions.txt` が更新される
+3. `git diff cursor/extensions.txt` で内容確認 → commit & push
+4. 別マシンの `install.sh` 実行で同期される
+
+### 前提
+
+`cursor` CLI が PATH に通っていること。Cursor で `Cmd + Shift + P` → `Shell Command: Install 'cursor' command in PATH` を実行して導入する。
