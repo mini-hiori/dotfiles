@@ -111,6 +111,41 @@ ensure_aws_sso_local_config() {
   log "→ \$EDITOR $local_file で ACCOUNTS と SSO_START_URL を編集してください"
 }
 
+ensure_claude_skills() {
+  # 別リポ mini-hiori/skills を clone/更新し、各スキルを ~/.claude/skills/ に symlink する。
+  # skills リポは 1 ディレクトリ 1 スキル (skills/<name>/SKILL.md) の構成。
+  local repo_url="https://github.com/mini-hiori/skills.git"
+  local src="${XDG_DATA_HOME:-$HOME/.local/share}/claude-skills"
+  local skills_home="$HOME/.claude/skills"
+
+  if [[ -d "$src/.git" ]]; then
+    log "skills リポを更新: $src"
+    git -C "$src" pull --ff-only >/dev/null 2>&1 || log "⚠️ pull 失敗 (既存を使用)"
+  else
+    log "skills リポを clone: $src"
+    mkdir -p "$(dirname "$src")"
+    if ! git clone "$repo_url" "$src" >/dev/null 2>&1; then
+      log "⚠️ clone 失敗 (private repo の認証を確認してください)。skip"
+      return 0
+    fi
+  fi
+
+  local skills_root="$src/skills"
+  if [[ ! -d "$skills_root" ]]; then
+    log "skills/ ディレクトリが無いため skip: $skills_root"
+    return 0
+  fi
+
+  local count=0 skill_dir name
+  for skill_dir in "$skills_root"/*/; do
+    [[ -f "${skill_dir}SKILL.md" ]] || continue  # SKILL.md を持つディレクトリのみスキルとして扱う
+    name="$(basename "$skill_dir")"
+    ensure_symlink "${skill_dir%/}" "$skills_home/$name"
+    count=$((count + 1))
+  done
+  log "skills を ${count} 件 symlink"
+}
+
 main() {
   section "Ghostty"
   ensure_symlink \
@@ -133,6 +168,9 @@ main() {
 
   section "scripts/aws-sso-config.local.sh (機微情報を保持するローカル設定)"
   ensure_aws_sso_local_config
+
+  section "Claude Code skills (~/.claude/skills に symlink)"
+  ensure_claude_skills
 
   printf '\n完了。新しいシェルを起動するか `source ~/.zshrc` で設定を反映させてください。\n'
 }

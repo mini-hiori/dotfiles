@@ -10,6 +10,7 @@
 | [Cursor](https://www.cursor.com/) | [`cursor/`](./cursor) (`settings.json`, `keybindings.json`, `extensions.txt`) |
 | 業務改善スクリプト | [`scripts/`](./scripts) (`aws-sso-login.sh` ほか) |
 | zsh 設定スニペット (PATH / エイリアス) | [`zsh/zshrc.dotfiles.zsh`](./zsh/zshrc.dotfiles.zsh) |
+| Claude Code skills | 別リポ [mini-hiori/skills](https://github.com/mini-hiori/skills) を `install.sh` から取得し `~/.claude/skills` に symlink |
 
 ## インストール (macOS)
 
@@ -25,6 +26,7 @@
 - `cursor/extensions.txt` の **拡張機能を `cursor --install-extension` で順次 install** (未導入のみ、`cursor` CLI 不在時は skip)
 - `~/.zshrc` の末尾に `source "<dotfiles>/zsh/zshrc.dotfiles.zsh"` を **1 行追記** (既存 zshrc を破壊しない追記型。重複検出済み)
 - `scripts/aws-sso-config.local.sh` を `.example` から **テンプレートコピー** (要編集、後述)
+- [mini-hiori/skills](https://github.com/mini-hiori/skills) を `${XDG_DATA_HOME:-$HOME/.local/share}/claude-skills` に **clone / 更新**し、`skills/` 配下の各スキルを `~/.claude/skills/<name>` に **symlink** (private repo のため要 GitHub 認証。clone 失敗時は skip)
 
 **衝突時の挙動**: 既存ファイルは `<target>.bak.YYYYMMDDHHMMSS` 形式でバックアップしてから置き換える。
 
